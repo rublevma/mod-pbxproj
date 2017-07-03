@@ -223,7 +223,7 @@ class ProjectFlags:
         mandatory. Contrariwise, in xcode 8< provisioning_profile_uuid becomes mandatory and
         provisioning_profile_specifier becomes optional.
 
-        :param code_sign_identity: Code sign identity name. Usually formatted as: 'iPhone Distribution[: <Company name> (MAAYFEXXXX)]'
+        :param code_sign_identity: Code sign identity name. Usually formatted as: 'iPhone Distribution: <Company name> (MAAYFEXXXX)'
         :param development_team: Development team identifier string. Usually formatted as: 'MAAYFEXXXX'
         :param provisioning_profile_uuid: Provisioning profile UUID string. Usually formatted as: '6f1ffc4d-xxxx-xxxx-xxxx-6dc186280e1e'
         :param provisioning_profile_specifier: Provisioning profile specifier (a.k.a. name) string.
@@ -231,10 +231,12 @@ class ProjectFlags:
         :param configuration_name: Configuration name to add the flag to or None for every configuration
         :return:
         """
-        self.set_flags(u'CODE_SIGN_IDENTITY[sdk=iphoneos*]', code_sign_identity, target_name, configuration_name)
+        self.set_flags(u'CODE_SIGN_IDENTITY[sdk=iphoneos*]', code_sign_identity.split[':'][0])
+        self.set_flags(u'CODE_SIGN_IDENTITY', code_sign_identity, target_name, configuration_name)
         self.set_flags(u'DEVELOPMENT_TEAM', development_team, target_name, configuration_name)
         self.set_flags(u'PROVISIONING_PROFILE', provisioning_profile_uuid, target_name, configuration_name)
-        self.set_flags(u'PROVISIONING_PROFILE_SPECIFIER', provisioning_profile_specifier, target_name, configuration_name)
+        self.set_flags(u'PROVISIONING_PROFILE_SPECIFIER', provisioning_profile_specifier, target_name,
+                       configuration_name)
 
         for target in self.objects.get_targets(target_name):
             self.objects[self.rootObject].set_provisioning_style(PBXProvioningTypes.MANUAL, target)
